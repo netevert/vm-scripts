@@ -52,11 +52,12 @@ If (-not (Test-Path "C:\ProgramData\chocolatey")) {
   Write-Host "Chocolatey is already installed."
 }
 
-Write-Host "Installing Notepad++, Chrome, 7zip, Firefox."
+Write-Host "Installing Notepad++, Chrome, 7zip, Firefox and python"
 choco install -y NotepadPlusPlus
 choco install -y GoogleChrome
 choco install -y Firefox
 choco install -y 7zip
+choco install -y python
 
 Write-Host "Utilties installation complete!"
 
@@ -145,6 +146,3 @@ Move-Item C:\files\README.txt C:\
 # Clean-up both zipped and unzipped configuration folders
 Remove-Item C:\files.zip
 Remove-Item C:\files\ -Recurse
-
-# Install python3
-choco install -y python
