@@ -1,5 +1,4 @@
 $configfolderlocation=$args[0]
-$username=$args[1]
 
 # Making sure all names are resolved
 Resolve-DnsName github.com
