@@ -1,3 +1,5 @@
+$configfolderlocation=$args[0]
+
 # Making sure all names are resolved
 Resolve-DnsName github.com
 Resolve-DnsName raw.githubusercontent.com
@@ -113,3 +115,22 @@ $appname = "Microsoft Store"
 ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $appname}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}
 $appname = "Mail"
 ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $appname}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}
+
+(New-Object System.Net.WebClient).DownloadFile($configfolderlocation, "$env:USERPROFILE\Desktop\files.zip")
+7z e$env:USERPROFILE\Desktop\files.zip -o$env:USERPROFILE\Desktop\files
+
+Add-Type -TypeDefinition @'
+using System.Runtime.InteropServices;
+public class Wallpaper {
+    public const uint SPI_SETDESKWALLPAPER = 0x0014;
+    public const uint SPIF_UPDATEINIFILE = 0x01;
+    public const uint SPIF_SENDWININICHANGE = 0x02;
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    private static extern int SystemParametersInfo (uint uAction, uint uParam, string lpvParam, uint fuWinIni);
+    public static void SetWallpaper (string path) {
+        SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+    }
+}
+'@
+
+[Wallpaper]::SetWallpaper("$env:USERPROFILE\Desktop\files\desktop.PNG")
