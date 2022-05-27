@@ -1,4 +1,5 @@
 $configfolderlocation=$args[0]
+$username=$args[1]
 
 # Making sure all names are resolved
 Resolve-DnsName github.com
@@ -117,8 +118,8 @@ $appname = "Mail"
 ((New-Object -Com Shell.Application).NameSpace('shell:::{4234d49b-0245-4df3-b780-3893943456e1}').Items() | ?{$_.Name -eq $appname}).Verbs() | ?{$_.Name.replace('&','') -match 'Unpin from taskbar'} | %{$_.DoIt(); $exec = $true}
 
 # Download configuration folder and unzip
-(New-Object System.Net.WebClient).DownloadFile($configfolderlocation, "$env:USERPROFILE\Desktop\files.zip")
-7z x "$env:USERPROFILE\Desktop\files.zip" -o"$env:USERPROFILE\Desktop\"
+(New-Object System.Net.WebClient).DownloadFile($configfolderlocation, "C:\Users\$username\Desktop\files.zip")
+7z x "C:\Users\$username\Desktop\files.zip" -o"C:\Users\$username\Desktop\"
 
 # Set desktop background
 Add-Type -TypeDefinition @'
@@ -135,15 +136,15 @@ public class Wallpaper {
 }
 '@
 
-[Wallpaper]::SetWallpaper("$env:USERPROFILE\Desktop\files\desktop.PNG")
+[Wallpaper]::SetWallpaper("C:\Users\$username\Desktop\files\desktop.PNG")
 
 # Move companion folder and README to desktop
-Move-Item $env:USERPROFILE\Desktop\files\companion_folder $env:USERPROFILE\Desktop\companion_folder
-Move-Item $env:USERPROFILE\Desktop\files\README.txt $env:USERPROFILE\Desktop\
+Move-Item C:\Users\$username\Desktop\files\companion_folder C:\Users\$username\Desktop\companion_folder
+Move-Item C:\Users\$username\Desktop\files\README.txt C:\Users\$username\Desktop\
 
 # Clean-up both zipped and unzipped configuration folders
-Remove-Item $env:USERPROFILE\Desktop\files.zip
-Remove-Item $env:USERPROFILE\Desktop\files\ -Recurse
+Remove-Item C:\Users\$username\Desktop\files.zip
+Remove-Item C:\Users\$username\Desktop\files\ -Recurse
 
 # Install python3
 choco install -y python
